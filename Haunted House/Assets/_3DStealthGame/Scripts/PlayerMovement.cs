@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
 
     public InputAction MoveAction;
 
+    public GameObject attackPrefab;
+    private bool usedAttack = false;
     public float walkSpeed = 1.0f;
     public float turnSpeed = 20f;
 
@@ -28,10 +30,12 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        Shooting();
         var pos = MoveAction.ReadValue<Vector2>();
 
         float horizontal = pos.x;
         float vertical = pos.y;
+
 
         m_Movement.Set(horizontal, 0f, vertical);
         m_Movement.Normalize();
@@ -66,4 +70,14 @@ public class PlayerMovement : MonoBehaviour
     {
         return m_OwnedKeys.Contains(keyName);
     }
+    //Used shooting code from fighter plane, will only allow it once. 
+    void Shooting()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && usedAttack == false)
+        {
+            Instantiate(attackPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+            usedAttack = true;
+        }
+    }
+
 }
